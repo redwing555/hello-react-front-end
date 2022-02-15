@@ -5,18 +5,14 @@ import configureStore from '../redux/configureStore';
 import Greeting from './Greeting';
 
 const store = configureStore();
-const App = () => {
-  
-    return (
-      <Provider store={store}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Greeting />} />
-          </Routes>
-        </BrowserRouter>
-      </Provider>
-    );
-
-}
+const App = () => (
+  <Provider store={store}>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Greeting />} />
+      </Routes>
+    </BrowserRouter>
+  </Provider>
+);
 
 export default App;
