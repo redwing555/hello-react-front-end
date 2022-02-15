@@ -14,7 +14,7 @@ const greetingSuccess = (json) => ({
 
 const getGreeting = () => async (dispatch) => {
   dispatch({ type: GET_GREETING_REQUEST });
-  const response = await fetch('http://localhost:3000/api/v1/messages.json');
+  const response = await fetch('https://random-greeting-api.herokuapp.com/api/v1/messages.json');
   const json = await response.json();
   return dispatch(greetingSuccess(json));
 };
