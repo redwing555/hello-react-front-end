@@ -1,32 +1,30 @@
 import React from 'react';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
+import uuid from 'react-uuid';
+import PropTypes from 'prop-types';
 
 const GET_GREETING_SUCCESS = 'GET_GREETING_SUCCESS';
 const GET_GREETING_REQUEST = 'GET_GREETING_REQUEST';
-
-const getGreeting = () => async (dispatch) => {
-  dispatch({ type: GET_GREETING_REQUEST });
-  try {
-    const response = await fetch('http://localhost:3000/api/v1/messages.json');
-    const json = await response.json();
-    return dispatch(greetingSuccess(json));
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 const greetingSuccess = (json) => ({
   type: GET_GREETING_SUCCESS,
   json,
 });
-const Greeting = (props) => {
-  const { greeting } = props;
-  const greetingMessage = greeting.map((message, i) => <div className="message" key={i}>{message.greeting}</div>);
+
+const getGreeting = () => async (dispatch) => {
+  dispatch({ type: GET_GREETING_REQUEST });
+  const response = await fetch('http://localhost:3000/api/v1/messages.json');
+  const json = await response.json();
+  return dispatch(greetingSuccess(json));
+};
+
+const Greeting = ({ greeting, getGreeting }) => {
+  const greetingMessage = greeting.map((message) => <div className="message" key={uuid()}>{message.greeting}</div>);
 
   return (
     <>
-      <button onClick={() => props.getGreeting()}>Generate random greeting</button>
+      <button type="button" onClick={() => getGreeting()}>Generate random greeting</button>
       <div>{greetingMessage}</div>
     </>
   );
@@ -37,5 +35,10 @@ const structuredSelector = createStructuredSelector({
 });
 
 const mapDispatchToProps = { getGreeting };
+
+Greeting.propTypes = {
+  greeting: PropTypes.instanceOf(Array).isRequired,
+  getGreeting: PropTypes.func.isRequired,
+};
 
 export default connect(structuredSelector, mapDispatchToProps)(Greeting);
